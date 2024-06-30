@@ -27,9 +27,12 @@ export const userSchema = new Schema<User>(
     },
     roles: {
       type: String,
-      required: true,
       default: "students",
     },
+    refreshToken:{
+      type:String,
+      default:""
+    }
   },
   {
     timestamps: true,

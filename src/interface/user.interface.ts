@@ -6,6 +6,7 @@ export interface User {
   isAdmin: boolean;
   roles: string;
   profile: string;
+  refreshToken:string,
   createdAt: string;
   updatedAt: string;
 }
