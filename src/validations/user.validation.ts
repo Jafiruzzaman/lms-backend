@@ -3,13 +3,13 @@ import { z } from "zod";
 // loginSchema
 export const loginSchema = z.object({
   email: z
-    .string({ required_error: "user name is required" })
+    .string({ required_error: "email is required" })
     .trim()
     .email()
     // TODO: ADD EMAIL REGEX HERE
     // .regex()
-    .min(3, "user name must be at least 3 character")
-    .max(30, "user name must not be more than 30 character"),
+    .min(3, "email must be at least 3 character")
+    .max(30, "email must not be more than 30 character"),
   password: z
     .string({ required_error: "password is required" })
     .trim()
