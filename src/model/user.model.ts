@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../interface/user.interface";
 import { userSchema } from "../schema/user.schema";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { config } from "../config/config";
 // hash the password
 userSchema.pre("save", async function (next) {
   try {
@@ -22,33 +20,6 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// generateAccessToken
-userSchema.methods.generateAccessToken = async function (user: any) {
-  jwt.sign(
-    {
-      userId:user._id,
-      username:user.name,
-      email:user.email,
-      isAdmin:user.isAdmin,
-      roles:user.roles,
-    },
-    config.access_token_secret,
-    {
-      expiresIn: config.access_token_expiry,
-    }
-  );
-};
-// generateRefreshToken
-userSchema.methods.generateRefreshToken = async function (user: any) {
-  jwt.sign(
-    {
-      userId:user._id,
-    },
-    config.refresh_token_secret,
-    {
-      expiresIn: config.refresh_token_expiry,
-    }
-  );
-};
+
 
 export default mongoose.model<User>("User", userSchema);
