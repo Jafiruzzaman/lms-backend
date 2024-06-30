@@ -8,6 +8,6 @@ export interface Course {
   courseImage: string;
   author: User;
   courseType: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

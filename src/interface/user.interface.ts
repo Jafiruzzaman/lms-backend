@@ -7,6 +7,6 @@ export interface User {
   roles: string;
   profile: string;
   refreshToken:string,
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
