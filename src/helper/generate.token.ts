@@ -27,4 +27,5 @@ export const generateRefreshToken = async function (user: any) {
       expiresIn: config.refresh_token_expiry,
     }
   );
+  user.save({validateBeforeSave:false})
 };
