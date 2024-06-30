@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/config";
 import { globalErrorHandler } from "./utils/globalErrorHandler";
 import { userRoutes } from "./router/user.routes";
+import { courseRoutes } from "./router/course.routes";
 const app = express();
 // express json configuration
 app.use(
@@ -35,5 +36,6 @@ app.use(cookieParser());
 app.use(globalErrorHandler);
 // routes
 app.use("/api/v1", userRoutes);
+app.use("/api/v1/course", courseRoutes);
 // export app
 export { app };
