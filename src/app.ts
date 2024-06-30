@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { config } from "./config/config";
+import { globalErrorHandler } from "./utils/globalErrorHandler";
+import { userRoutes } from "./router/user.routes";
 const app = express();
 // express json configuration
 app.use(
@@ -30,8 +32,8 @@ app.use(
 app.use(cookieParser());
 
 // globalErrorHandler
-
+app.use(globalErrorHandler);
 // routes
-
+app.use("/api/v1", userRoutes);
 // export app
 export { app };
