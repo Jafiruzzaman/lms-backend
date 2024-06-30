@@ -13,6 +13,8 @@ userRoutes.route("/users/auth/signup").post(validate(signUpSchema), signUp);
 userRoutes.route("/users/auth/login").post(validate(loginSchema), login);
 userRoutes.route("/users/auth/logout").post(authenticate, logout);
 userRoutes.route("/users/me").get(authenticate, user);
-userRoutes.route("/users/auth/update-password").patch(authenticate,updatePassword)
+userRoutes
+  .route("/users/auth/update-password")
+  .patch(authenticate, updatePassword);
 // export userRoutes
 export { userRoutes };

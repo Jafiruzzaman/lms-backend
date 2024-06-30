@@ -1,14 +1,14 @@
-import jwt from 'jsonwebtoken';
-import { config } from '../config/config';
+import jwt from "jsonwebtoken";
+import { config } from "../config/config";
 // generateAccessToken
 export const generateAccessToken = async function (user: any) {
   jwt.sign(
     {
-      userId:user._id,
-      username:user.name,
-      email:user.email,
-      isAdmin:user.isAdmin,
-      roles:user.roles,
+      userId: user._id,
+      username: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      roles: user.roles,
     },
     config.access_token_secret,
     {
@@ -20,12 +20,12 @@ export const generateAccessToken = async function (user: any) {
 export const generateRefreshToken = async function (user: any) {
   jwt.sign(
     {
-      userId:user._id,
+      userId: user._id,
     },
     config.refresh_token_secret,
     {
       expiresIn: config.refresh_token_expiry,
     }
   );
-  user.save({validateBeforeSave:false})
+  user.save({ validateBeforeSave: false });
 };

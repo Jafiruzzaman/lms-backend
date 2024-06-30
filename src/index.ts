@@ -20,3 +20,4 @@ const startServer = async () => {
     console.log(`something went wrong while start server ${error.message}`);
   }
 };
+startServer();
