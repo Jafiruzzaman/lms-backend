@@ -45,6 +45,7 @@ export const getCourse = asyncHandler(
     try {
       const courseId = await req.params;
       const getCourse = await courseModel.findById(courseId);
+      // TODO: Here use caching 
       return res.status(200).json({
         message: "get single course successfully",
         create_course: getCourse,
@@ -58,3 +59,21 @@ export const getCourse = asyncHandler(
   }
 );
 
+// get all course 
+export const getAllCourse = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const getAllCourse = await courseModel.find();
+      // TODO: Here use caching 
+      return res.status(200).json({
+        message: "get single course successfully",
+        create_course: getAllCourse,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        message: "something went wrong while get all course",
+        error: error.message,
+      });
+    }
+  }
+);
