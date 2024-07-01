@@ -20,6 +20,8 @@ export const fileUploadOnCloudinary = async (localFilePath:string,folder:string)
     // remove the local file
     fs.unlinkSync(localFilePath)
     console.log('remove file')
+    // return upload result
+    return uploadResult;
   } catch (error) {
     if (!localFilePath) {
       console.log("error",error)

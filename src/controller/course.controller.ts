@@ -1,3 +1,4 @@
+import { fileUploadOnCloudinary } from "../global/cloudinary";
 import courseModel from "../model/course.model";
 import userModel from "../model/user.model";
 import { asyncHandler } from "../utils/asyncHandler";
@@ -6,23 +7,26 @@ import { NextFunction, Request, Response } from "express";
 export const createCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {
-        title,
-        description,
-        estimatedPrice,
-        discountPrice,
-        courseImage,
-        courseType,
-      } = await req.body;
+      const { title, description, estimatedPrice, discountPrice, courseType } =
+        await req.body;
+      console.log("all info", req.body);
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      console.log("files", files);
+      const courseImageLocalPath = files.courseImage[0]?.path;
+      console.log("courseImageLocalPath",courseImageLocalPath)
+      // console.log(courseImage)
       // @ts-ignore
       const userId = await req?.user;
-      const author = await userModel.findById(userId).populate("name");
+      const author = await userModel.findById(userId).select("-password -refreshToken");
+      const uploadCourseImage = await fileUploadOnCloudinary(courseImageLocalPath,"course")
+      const uploadCourseImageSecurePath = uploadCourseImage?.secure_url
+      console.log("upload course image result")
       const createCourse = await courseModel.create({
         title: title,
         description: description,
         estimatedPrice: estimatedPrice,
         discountPrice: discountPrice,
-        courseImage: courseImage,
+        courseImage: uploadCourseImageSecurePath,
         courseType: courseType,
         author: author,
       });
