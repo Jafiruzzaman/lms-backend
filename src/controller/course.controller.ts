@@ -13,14 +13,19 @@ export const createCourse = asyncHandler(
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
       console.log("files", files);
       const courseImageLocalPath = files.courseImage[0]?.path;
-      console.log("courseImageLocalPath",courseImageLocalPath)
+      console.log("courseImageLocalPath", courseImageLocalPath);
       // console.log(courseImage)
       // @ts-ignore
       const userId = await req?.user;
-      const author = await userModel.findById(userId).select("-password -refreshToken");
-      const uploadCourseImage = await fileUploadOnCloudinary(courseImageLocalPath,"course")
-      const uploadCourseImageSecurePath = uploadCourseImage?.secure_url
-      console.log("upload course image result")
+      const author = await userModel
+        .findById(userId)
+        .select("-password -refreshToken");
+      const uploadCourseImage = await fileUploadOnCloudinary(
+        courseImageLocalPath,
+        "course"
+      );
+      const uploadCourseImageSecurePath = uploadCourseImage?.secure_url;
+      console.log("upload course image result");
       const createCourse = await courseModel.create({
         title: title,
         description: description,
@@ -85,7 +90,7 @@ export const getAllCourse = asyncHandler(
 export const updateCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const courseId = await req.params;
+      const courseId = await req.params.courseId;
       // @ts-ignore
       const userId = req?.user;
       const {
@@ -114,9 +119,9 @@ export const updateCourse = asyncHandler(
         courseType: courseType,
         author: author,
       });
-      return res.status(204).json({
-        message: "delete course successfully",
-        create_course: updateCourse,
+      return res.status(200).json({
+        message: "course updated successfully",
+        update_course: updateCourse,
       });
     } catch (error: any) {
       return res.status(500).json({
@@ -131,13 +136,15 @@ export const updateCourse = asyncHandler(
 export const deleteCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const courseId = await req.params;
+      const courseId = await req.params.courseId;
       // @ts-ignore
       const userId = req?.user;
+      console.log("user",typeof(userId))
       const getCourse = await courseModel.findById(courseId);
       // TODO: Here use caching
+      console.log("get curs",typeof(getCourse?.author._id))
       let deleteCourse;
-      if (getCourse?.author._id === userId) {
+      if (getCourse?.author._id.toString() === userId) {
         deleteCourse = await courseModel.findByIdAndDelete(courseId);
       } else {
         res.status(401).json({
@@ -147,7 +154,7 @@ export const deleteCourse = asyncHandler(
       }
       return res.status(204).json({
         message: "delete course successfully",
-        create_course: deleteCourse,
+        delete_course: deleteCourse,
       });
     } catch (error: any) {
       return res.status(500).json({

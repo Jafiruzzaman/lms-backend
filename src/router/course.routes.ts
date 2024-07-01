@@ -24,8 +24,8 @@ courseRoutes.route("/create-course").post(
   createCourse
 );
 courseRoutes.route("/get-course/:courseId").get(authenticate, isAdmin, getCourse);
-courseRoutes.route("/get-all-course").get(authenticate, isAdmin, getAllCourse);
-courseRoutes.route("/update-course").put(
+courseRoutes.route("/get-all-courses").get(authenticate, isAdmin, getAllCourse);
+courseRoutes.route("/update-course/:courseId").put(
   upload.fields([
     {
       name: "courseImage",
@@ -37,7 +37,8 @@ courseRoutes.route("/update-course").put(
   updateCourse
 );
 courseRoutes
-  .route("/delete-course")
+  .route("/delete-course/:courseId")
   .delete(authenticate, isAdmin, deleteCourse);
 // export
 export { courseRoutes };
+// intermediate
