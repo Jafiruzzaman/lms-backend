@@ -8,6 +8,7 @@ import { courseRoutes } from "./router/course.routes";
 import { contactRoutes } from "./router/contact.routes";
 import { reviewRoutes } from "./router/review.routes";
 import { adminRoutes } from "./router/admin.routes";
+import { emailRoutes } from "./router/email.routes";
 const app = express();
 // express json configuration
 app.use(
@@ -43,5 +44,6 @@ app.use("/api/v1", adminRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/users", reviewRoutes);
 app.use("/api/v1", contactRoutes);
+app.use("/api/v1", emailRoutes);
 // export app
 export { app };
