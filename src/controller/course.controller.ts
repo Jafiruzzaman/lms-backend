@@ -47,7 +47,7 @@ export const createCourse = asyncHandler(
 export const getCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const courseId = await req.params;
+      const courseId = await req.params.courseId;
       const getCourse = await courseModel.findById(courseId);
       // TODO: Here use caching
       return res.status(200).json({

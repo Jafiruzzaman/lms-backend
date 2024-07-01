@@ -23,7 +23,7 @@ courseRoutes.route("/create-course").post(
   isAdmin,
   createCourse
 );
-courseRoutes.route("/get-course").get(authenticate, isAdmin, getCourse);
+courseRoutes.route("/get-course/:courseId").get(authenticate, isAdmin, getCourse);
 courseRoutes.route("/get-all-course").get(authenticate, isAdmin, getAllCourse);
 courseRoutes.route("/update-course").put(
   upload.fields([
