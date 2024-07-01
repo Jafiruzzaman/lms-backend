@@ -8,10 +8,10 @@ export const emailController = asyncHandler(
       const { email } = req.body;
       // @ts-ignore
       const userId = req.user;
-      const user = await userModel.findById(userId);
+      const user = await userModel.findById(userId).select("-password -refreshToken");
       const emailSubscriptions = await emailModel.create({
         userInfo: user,
-        email: user?.email || email,
+        email:email,
       });
       return res.status(201).json({
         message: "email send successfully",
