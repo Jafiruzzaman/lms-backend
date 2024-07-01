@@ -6,14 +6,16 @@ import { NextFunction, Request, Response } from "express";
 export const reviewController = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, image, review } = req.body;
+      const {image, review } = req.body;
       // @ts-ignore
       const userId = await req?.user;
       const user = await userModel.findById(userId);
+      console.log("reviews", user);
       const reviewPost = await reviewModel.create({
+        userId: userId,
         name: user?.name,
         email: user?.email,
-        image: user?.profile,
+        image: user?.profile || image,
         review: review,
       });
       return res.status(201).json({

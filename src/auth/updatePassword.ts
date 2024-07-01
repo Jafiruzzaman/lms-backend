@@ -10,6 +10,7 @@ export const updatePassword = asyncHandler(
       // @ts-ignore
       const userId = await req.user;
       const user = await userModel.findById(userId);
+      console.log("update password",user)
       // @ts-ignore
       const isPasswordValid = await bcrypt.compare(oldPassword, user?.password);
       if (!isPasswordValid) {
@@ -18,7 +19,7 @@ export const updatePassword = asyncHandler(
         });
         return next();
       } else {
-        const hashPassword = bcrypt.hash(newPassword, 10);
+        const hashPassword = await bcrypt.hash(newPassword, 10);
         const updatePassword = await userModel.findByIdAndUpdate(
           userId,
           {

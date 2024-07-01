@@ -31,7 +31,6 @@ export const userSchema = new Schema<User>(
     },
     refreshToken:{
       type:String,
-      default:""
     }
   },
   {

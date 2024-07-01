@@ -2,10 +2,11 @@ import { User } from "./user.interface";
 
 export interface Review {
   _id: string;
-  name: User;
+  userId: User;
+  name: string;
   image: string;
   email: string;
-  review:string,
+  review: string;
   createdAt: Date;
   updatedAt: Date;
 }

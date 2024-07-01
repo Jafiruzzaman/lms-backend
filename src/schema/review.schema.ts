@@ -2,9 +2,14 @@ import { Schema } from "mongoose";
 import { Review } from "../interface/review.interface";
 export const reviewSchema = new Schema<Review>(
   {
-    name: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
     email: {
       type: String,

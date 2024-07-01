@@ -8,7 +8,7 @@ export const signUp = asyncHandler(
       console.log("email", email);
       // check if user exist
       const userExist = await userModel.findOne({ email });
-      if (!userExist) {
+      if (userExist) {
         res.status(400).json({
           message: "user is already exist with this email",
         });

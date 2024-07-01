@@ -2,60 +2,79 @@ import userModel from "../model/user.model";
 import { asyncHandler } from "../utils/asyncHandler";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { userSchema } from "../schema/user.schema";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../helper/generate.token";
 import { options } from "../global/options";
+import jwt from "jsonwebtoken";
+import { config } from "../config/config";
+
 export const login = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body;
+      const { email, password } = await req.body;
+      // if user is already exist
       const userExist = await userModel.findOne({ email });
       if (!userExist) {
         res.status(401).json({
-          message: "user doesn't exist with this email",
+          message: "Invalid Email address",
         });
         return next();
       }
-      // compare password
-      const isPasswordMatch = async (password: string) => {
+      // check is password is match or not
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        userExist.password
+      );
+      if (!isPasswordCorrect) {
+        res.status(401).json({
+          message: "Invalid user credentials",
+        });
+        return next();
+      }
+      const signInUser = await userModel.findOne({ email }).select("-password");
+      const generateAccessAndRefreshToken = async () => {
         try {
-          const isPasswordValid = await bcrypt.compare(
-            password,
-            userExist.password
+          const accessToken = await jwt.sign(
+            {
+              _id: userExist._id,
+              username: userExist.name,
+              email: userExist.email,
+              isAdmin: userExist.isAdmin,
+              roles:userExist.roles
+            },
+            config.access_token_secret,
+            {
+              expiresIn: config.access_token_expiry,
+            }
           );
-          if (!isPasswordValid) {
-            res.status(403).json({
-              message: "Invalid user credentials",
-            });
-            return next();
-          }
+          const refreshToken = await jwt.sign(
+            {
+              _id: userExist._id,
+            },
+            config.refresh_token_secret,
+            {
+              expiresIn: config.refresh_token_expiry,
+            }
+          );
+          userExist.refreshToken = refreshToken;
+          userExist.save({ validateBeforeSave: false });
+          return { accessToken, refreshToken };
         } catch (error) {
-          return res.status(500).json({
-            message: "something went wrong while validating password",
-          });
+          return next(error);
         }
       };
-      const validPassword = isPasswordMatch(password);
-      // generate access token
-      const accessToken = await generateAccessToken(userExist);
-      // generate refresh token
-      const refreshToken = await generateRefreshToken(userExist);
-      const loginUser = await userModel.findOne({ email });
+      const { accessToken, refreshToken }: any =
+        await generateAccessAndRefreshToken();
+      const signIn = await userModel.findOne({ email }).select("-password");
       return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
         .json({
-          message: "user login successfully",
-          user_data: loginUser,
+          message: "user signin successfully",
+          data: signIn,
         });
     } catch (error: any) {
-      return res.status(500).json({
-        message: "something went wrong while login user",
-        error: error.message,
+      return res.json({
+        message: error.message,
       });
     }
   }

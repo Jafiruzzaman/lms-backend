@@ -15,6 +15,6 @@ userRoutes.route("/users/auth/logout").post(authenticate, logout);
 userRoutes.route("/users/me").get(authenticate, user);
 userRoutes
   .route("/users/auth/update-password")
-  .patch(authenticate, updatePassword);
+  .put(authenticate, updatePassword);
 // export userRoutes
 export { userRoutes };
