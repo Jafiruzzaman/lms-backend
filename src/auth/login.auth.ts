@@ -63,14 +63,15 @@ export const login = asyncHandler(
       };
       const { accessToken, refreshToken }: any =
         await generateAccessAndRefreshToken();
-      const signIn = await userModel.findOne({ email }).select("-password");
+      const login = await userModel.findById(userExist._id).select("-password -refreshToken");
+      
       return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
         .json({
           message: "user signin successfully",
-          data: signIn,
+          data: login,
         });
     } catch (error: any) {
       return res.json({
