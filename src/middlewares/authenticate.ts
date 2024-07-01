@@ -25,7 +25,6 @@ export const authenticate = async (
       });
       return next();
     }
-    // FIXME: remove it after seen the log
     // @ts-ignore
     req?.user = decodedToken._id;
     return next();
